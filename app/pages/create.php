@@ -1,7 +1,7 @@
 <?php
 session_start();
-include('../../Data/TaskDao.php');
-require_once '../models/TaskModel.php';
+include('../../data/TaskDao.php');
+require_once '../../models/TaskModel.php';
 ?>
 
 <!doctype html>
@@ -28,7 +28,7 @@ require_once '../models/TaskModel.php';
                         </h4>
                     </div>
                     <div class="card-body">
-                        <form action="../controllers/TaskController.php?action=insertTask" method="POST">
+                        <form action="create.php" method="POST">
                             <div class="mb-3">
                                 <label>Descrição</label>
                                 <input type="text" name="description" class="form-control">
@@ -50,7 +50,23 @@ require_once '../models/TaskModel.php';
             </div>
         </div>
     </div>
+    <?php
+    if (isset($_POST['save'])) {
+        $description = $_POST['description'] ?? null;
+        $date = $_POST['date'] ?? null;
+        $status = $_POST['status'] ?? null;
+        
+        $taskModel = new TaskModel();
+        $taskModel->setDescription($description);
+        $taskModel->setDate($date);
+        $taskModel->setStatus($status == 'on' ? 1 : 0);
 
+        $taskDAO = new TaskDAO();
+        $taskDAO->insert($taskModel);
+        
+        $_SESSION['message'] = "Tarefa cadastrada com sucesso!";
+    }
+    ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

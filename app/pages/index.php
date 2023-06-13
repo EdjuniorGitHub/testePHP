@@ -1,8 +1,7 @@
 <?php
     session_start();
-    include('config.php');
-    include('../Data/TaskDao.php');
-    require_once '../app/models/TaskModel.php';
+    include('../../data/TaskDao.php');
+    require_once '../../models/TaskModel.php';
 ?>
 <!doctype html>
 <html lang="pt-BR">
@@ -18,13 +17,13 @@
 <body>
   
     <div class="container mt-4">
-        <?php include('alert.php'); ?>
+        <?php include('../alert.php'); ?>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <h4>Tarefas
-                            <a href="../app/views/create.php" class="btn btn-primary float-end">
+                            <a href="create.php" class="btn btn-primary float-end">
                                 <i class="bi bi-plus-lg"></i></a>
                         </h4>
                     </div>
@@ -60,11 +59,11 @@
                                                     }
                                                 ?>
                                                 <td>
-                                                    <a href="../app/views/detail.php?id=<?= $task->getId(); ?>" class="btn btn-info btn-sm"><i class="bi bi-eye"></i></a>
-                                                    <a href="../app/views/edit.php?id=<?= $task->getId(); ?>" class="btn btn-success btn-sm"><i class="bi bi-pencil"></i></a>
-                                                    <form action="core.php" method="POST" class="d-inline" onsubmit="return confirm('Tem certeza de que deseja excluir?');">
-                                                        <input type="hidden" name="delete" value="<?= $task->getId(); ?>">
-                                                        <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-x"></i></button>
+                                                    <a href="detail.php?id=<?= $task->getId(); ?>" class="btn btn-info btn-sm"><i class="bi bi-eye"></i></a>
+                                                    <a href="edit.php?id=<?= $task->getId(); ?>" class="btn btn-success btn-sm"><i class="bi bi-pencil"></i></a>
+                                                    <form action="index.php" method="POST" class="d-inline" onsubmit="return confirm('Tem certeza de que deseja excluir?');">
+                                                        <input type="hidden" name="task_id" value="<?= $task->getId(); ?>">
+                                                        <button type="submit" name="delete" class="btn btn-danger btn-sm"><i class="bi bi-x"></i></button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -83,7 +82,23 @@
             </div>
         </div>
     </div>
+<?php
+    if (isset($_POST['delete'])) {
+        $id = $_POST['task_id'] ?? null;
+        
+        if($id != null)
+        {
+            $taskDAO = new TaskDAO();
+            $taskDAO->delete($id);
 
+            $_SESSION['message'] = "Tarefa excluida com sucesso!";
+        }
+        else
+        {
+            $_SESSION['message'] = "Tarefa não encontrada.";
+        }
+    }
+    ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

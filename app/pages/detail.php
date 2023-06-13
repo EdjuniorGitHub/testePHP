@@ -1,9 +1,7 @@
 <?php
-session_start();
-include('../../Data/TaskDao.php');
-require_once '../models/TaskModel.php';
+include('../../data/TaskDao.php');
+require_once '../../models/TaskModel.php';
 ?>
-
 <!doctype html>
 <html lang="pt-BR">
   <head>
@@ -13,21 +11,22 @@ require_once '../models/TaskModel.php';
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
 
-    <title>Editar</title>
+    <title>Detalhes</title>
 </head>
 <body>
-  
+
     <div class="container mt-5">
         <?php include('../alert.php'); ?>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Editar 
-                            <a href="../index.php" class="btn btn-danger float-end"><i class="bi bi-backspace"></i></a>
+                        <h4>Tarefa 
+                            <a href="index.php" class="btn btn-danger float-end"><i class="bi bi-backspace"></i></a>
                         </h4>
                     </div>
                     <div class="card-body">
+
                         <?php
                         if(isset($_GET['id']))
                         {
@@ -37,26 +36,27 @@ require_once '../models/TaskModel.php';
                             if(!empty($task))
                             {
                                 ?>
-                                <form action="core.php" method="POST">
-                                    <input type="hidden" name="task_id" value="<?= $task->getId(); ?>">
                                     <div class="mb-3">
                                         <label>Descrição</label>
-                                        <input type="text" name="description" value="<?=$task->getDescription();?>" class="form-control">
+                                        <p class="form-control">
+                                            <?=$task->getDescription();?>
+                                        </p>
                                     </div>
                                     <div class="mb-3">
                                         <label>Data</label>
-                                        <input type="text" name="description" value="<?=$task->getDate();?>" class="form-control">
+                                        <p class="form-control">
+                                            <?=$task->getDate();?>
+                                        </p>
                                     </div>
                                     <div class="mb-3">
-                                        <input type="checkbox" name="status" id="status" >
-                                        <label for="status">Tarefa concluída</label>
+                                        <?php
+                                            if ($task->getStatus()==1) {
+                                                echo "<p class='form-control'>Tarefa realizada</p>";
+                                            } else{
+                                                echo "<p class='form-control'>Tarefa pendente</p>";
+                                            }
+                                        ?>
                                     </div>
-                                    <div class="mb-3">
-                                        <button type="submit" name="update" class="btn btn-primary">
-                                            Atualizar tarefa
-                                        </button>
-                                    </div>
-                                </form>
                                 <?php
                             }
                             else
@@ -70,7 +70,7 @@ require_once '../models/TaskModel.php';
             </div>
         </div>
     </div>
-
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
